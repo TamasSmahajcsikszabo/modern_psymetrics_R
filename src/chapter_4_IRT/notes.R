@@ -112,8 +112,9 @@ RWDQ <- RWDQ[, -1]
 fit2p12 <- ltm(RWDQ ~ z1) # z1 is a generic placeholder for the single latent dimension
 # check item fit with Q1
 ltm::item.fit(fit2p12)
+pdf("pl2.pdf")
 plot(fit2p12, items = 1:5, legend = TRUE)
-
+dev.off()
 # person parameters
 ppars <- ltm::factor.scores(fit2p12, resp.patterns=RWDQ)$score.dat[, "z1"]
 
@@ -125,7 +126,9 @@ ppars <- ltm::factor.scores(fit2p12, resp.patterns=RWDQ)$score.dat[, "z1"]
 VPMT <- Wilmer[, 3:27]
 fit3pl <- tpm(VPMT)
 round(head(coef(fit3pl)),3)
+pdf("pl3.pdf")
 plot(fit3pl, item=1:6, legend=TRUE)
+dev.off()
 
 
 # Unidimensional polytomous IRT models
@@ -160,9 +163,13 @@ eRm::LRtest(fitrsm2, gradevec)
 thpar <- eRm::thresholds(fitrsm2)
 
 # for polytomous models we get an item-category characteristic curve for each category
+pdf("poly1.pdf")
 eRm::plotICC(fitrsm2, item=1)
+dev.off()
 # person-item map
+pdf("personitemmap.pdf")
 eRm::plotPImap(fitrsm2, latdim="Empathy", main="Person-Item Map CEAQ")
+dev.off()
 
 muraki_fit <- mirt::mirt(itceaq1, itemtype="grsm")
 plot(muraki_fit)
@@ -198,8 +205,12 @@ fitgrm <- ltm::grm(STitems)
 ppargrm <- ltm::factor.scores(fitgrm)
 
 #operation characteristic curve
+pdf("grm1.pdf")
 plot(fitgrm, items=1, type="OCCu")
+dev.off()
+pdf("grmICC")
 plot(fitgrm, items=1, type="ICC")
+dev.off()
 
 # Nominal Response Model
 # this model abandons the requirement of ordinality in item categories
