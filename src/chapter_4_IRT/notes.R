@@ -208,7 +208,7 @@ ppargrm <- ltm::factor.scores(fitgrm)
 pdf("grm1.pdf")
 plot(fitgrm, items=1, type="OCCu")
 dev.off()
-pdf("grmICC")
+pdf("grmICC.pdf")
 plot(fitgrm, items=1, type="ICC")
 dev.off()
 
@@ -232,3 +232,33 @@ fitnrm <- mirt::mirt(wpitnew, 1, itemtype="nominal")
 mirt::itemplot(fitnrm, item=5)
 #goodness-of-fit
 mirt::M2(fitnrm)
+
+# Item and Test Information
+# in which area of the trait an item is particularly informative
+# in what is the defree to which an item reduces the uncertainty in estimation of a person's trait value
+# item information
+plot(fitnrm, type="infotrace", main="Item Information")
+
+# rumination data
+save_plot <- function(p, plotname){ 
+   pdf(plotname)
+   p
+   dev.off()
+}
+rumination  <- readRDS("~/repos/rumination_lasso/data/data.RDS")
+scrs_ind <- match(paste0("SCRS_",1:10), colnames(rumination))
+scrs  <- rumination[,scrs_ind]
+scrs_fit <- mirt::mirt(scrs, 1)
+pdf("SCRSfit.pdf")
+plot(scrs_fit, type="infotrace", main="Item Information Curves for SCRS")
+dev.off()
+plot(scrs_fit, type="info", main="Self Critical Rumination Scale Test Information")
+
+rrs_ind <- match(paste0("RRS_", 1:10), colnames(rumination))
+rrs <- rumination[,rrs_ind]
+rrs_fit <- mirt::mirt(rrs, 1)
+rrsplot <- plot(rrs_fit, type="infotrace", main="Item Information Curvers for RRS")
+save_plot(plot(rrs_fit, type="infotrace"), "RRSfit.pdf")
+plot(rrs_fit, type="info", main="Ruminative Response Scale Test Information")
+
+
